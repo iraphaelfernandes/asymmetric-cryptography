@@ -1,0 +1,6 @@
+* Como fazer uma função retornar um vetor
+
+* O minimor não múltiplo comum é o (mmc-1)
+
+* Converter um vetor char em um vetor int
+

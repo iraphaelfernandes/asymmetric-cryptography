@@ -1,0 +1,18 @@
+1 - Escolha dois números primos: 13 e o 17 servem.
+
+2 - Pegue o número que seja o produto desses dois números primos, no caso, o número 221.
+
+3 - Tire um de cada um dos primos iniciais, o que dá 12 × 16 = 192. Vamos representar este número
+192 pela letra Y.
+
+4 - Pegue agora um número que não tenha
+divisor comum com Y, ou seja, este novo número e o Y serão primos entre si.
+
+5 - Escolher um número que não seja divisível nem por 2 nem por 3
+
+6 - Codificar
+
+7 - Decodificar
+
+
+
