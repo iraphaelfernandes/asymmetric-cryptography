@@ -14,5 +14,9 @@ divisor comum com Y, ou seja, este novo número e o Y serão primos entre si.
 
 7 - Decodificar
 
+8 - Faça dois programas: o primeiro (geranum.c) recebe dois
+números primos e gera dois arquivos, um com os números de criptografia (numcripto.txt) e o outro com
+os números de descriptografia (numdescripto.txt
 
-
+9 - Faça um programa (cripto.c )que receba um texto ASCII de
+várias linhas e converta-o usando a criptografia descrita acima.

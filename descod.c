@@ -19,61 +19,67 @@ int mdc(int a, int b); //Algoritmo de Euclides iterativo
 int mmc(int a, int b); //Algoritmo do MMC
 void codifica(unsigned long int vet[], char s[], int n1, int n2); //Converte com (s[i]^p)%div
 
-int calculaModulo( int n, int firstKey, int Y); //geral o tal 77
+int calculaModulo( int n, int firstKey,int Y); //geral o tal 77
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 //§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
 int main(void) {
   
-
-  char frase[MAX];
-  printf("\nDigite uma fase para ser criptografada: \n");
-  lelinha (frase, MAX);
-  printf("A frase a ser criptografada é:\n%s\n", frase);
+  int privKey;
+  int n = 0; 
+  int Y = 192;
   
-  int prime1, prime2;
+  ///////////////////////////////////////////////////////
+  //A chave de decodificação cujo produto pelo primeiro número publicado
+  // while (n != 1){
   
-  printf("\nAgora você precisará escolher dois números primos.\n");
-
-  printf("\nEscolha o primeiro número primo: \n");
-  prime1 = recebePrimeNum();
-  printf("\nEscolha o segundo número primo: \n");
-  prime2 = recebePrimeNum();
-  
-  int prodPrime;
-  prodPrime = prime1 * prime2;
-  int Y;
-  Y = (prime1 - 1)*(prime2 - 1);
-  
-  //Essa parte é responsável por escolher as chaves públicas
-  int numPrimeFactors; //Quantos são os fatores primos
-  int fatoresPrimos[100];
-  numPrimeFactors = primeFactors(fatoresPrimos, Y);
-  int firstPubKey;
-  firstPubKey = escolhePubKey(fatoresPrimos[0], fatoresPrimos[numPrimeFactors - 1]);
-  
-  printf("\nAs chaves públicas são %d e %d.\n", firstPubKey, prodPrime);
-  
-  int n;
-  int privKey = 0;
-  
-  while (n != 1){
-  
-    privKey++;
-    n = calculaModulo( privKey, 5, Y);
-  }
-  
-  //Aqui converterá a frase na mensagem transmitida
-  unsigned long int vet[MAX];
-  
-  codifica(vet, frase, firstPubKey, prodPrime);
-  
-  for( int i = 0; frase[i] != '\0'; i++) {
+  //   privKey++;
+  //   n = calculaModulo( privKey, 5, Y);  
+  // }
     
-    printf("%d  ");
-  }
-  printf("\n");
+  // printf("\n%d\n", privKey);
+  ///////////////////////////////////////////////////////
   
+  FILE *fp;
+  char str[MAX];
+  char* filename = "./numcripto.txt";
+  int j = 0;
+  
+  fp = fopen(filename, "r");
+  
+  if (fp == NULL){
+      printf("Could not open file %s",filename);
+      return 1;
+    }
+  
+  char * num;
+  int numbers[MAX];
+    while ( (num = fgets(fp)) != EOF ) {
+      
+      str[j] = num;
+      j++;
+    // numbers[j] = num;
+    // j++;
+  }
+    
+  printf("\n%d", numbers[0]);
+  
+  // while (fgets(str, MAX, fp) != NULL){
+    
+  //   for(j = 0; str[j]; j++) {
+      
+  //     fputc(str[j], fp);
+  //   }
+  // }
+
+
+  fclose(fp);
+    
+    
+      
+  // pubKeys[0] = fgets(pubKeys, sizeof pubKeys, "numcripto.txt");
+  
+  // printf("\n\n%s", pubKeys);
   
 //----------------------------------------------------  
   return 0;
@@ -230,20 +236,23 @@ void codifica(unsigned long int vet[], char s[], int n1, int n2) {
         pot = n2;
         div = n1;
     }
+    
+    
 
     for( i  = 0; s[i] != '\0'; i++){
 
         vet[i] = s[i];
     }
 
-    for(int j = 0; j != i; j++) {
+    // for(int j = 0; j != i; j++) {
 
-        temp = pow(vet[j], pot);
-        vet[j] = temp % n2;
-    }
+    //     temp = pow(vet[j], pot);
+    //     vet[j] = temp % n2;
+    // }
 }
 
-int calculaModulo( int n, int firstKey, int Y) {
+
+int calculaModulo( int n, int firstKey,int Y) {
   
   int num;
   

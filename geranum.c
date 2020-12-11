@@ -19,17 +19,13 @@ int mdc(int a, int b); //Algoritmo de Euclides iterativo
 int mmc(int a, int b); //Algoritmo do MMC
 void codifica(unsigned long int vet[], char s[], int n1, int n2); //Converte com (s[i]^p)%div
 
-int calculaModulo( int n, int firstKey, int Y); //geral o tal 77
+int calculaModulo( int n, int firstKey,int Y);
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 //§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
 int main(void) {
-  
 
-  char frase[MAX];
-  printf("\nDigite uma fase para ser criptografada: \n");
-  lelinha (frase, MAX);
-  printf("A frase a ser criptografada é:\n%s\n", frase);
+  
   
   int prime1, prime2;
   
@@ -52,27 +48,32 @@ int main(void) {
   int firstPubKey;
   firstPubKey = escolhePubKey(fatoresPrimos[0], fatoresPrimos[numPrimeFactors - 1]);
   
-  printf("\nAs chaves públicas são %d e %d.\n", firstPubKey, prodPrime);
+  FILE* fp = fopen("numcripto.txt", "w+");
   
+  fp = fopen("numcripto.txt", "w+");
+  fprintf(fp, "%d\n", firstPubKey);
+  fprintf(fp, "%d\n", prodPrime);
+  fclose(fp);
+  
+
+  // printf("\n firstPubKey é: %d", firstPubKey);
+  // printf("\nprodPrime é: %d\n", prodPrime);
+  
+  //A chave de decodificação cujo produto pelo primeiro número publicado
   int n;
   int privKey = 0;
   
   while (n != 1){
   
     privKey++;
-    n = calculaModulo( privKey, 5, Y);
+    n = calculaModulo( privKey, 5, Y);  
   }
   
-  //Aqui converterá a frase na mensagem transmitida
-  unsigned long int vet[MAX];
+  fp = fopen("numdescripto.txt", "w+");
+  fprintf(fp, "%d\n", privKey);
+  fclose(fp);
   
-  codifica(vet, frase, firstPubKey, prodPrime);
   
-  for( int i = 0; frase[i] != '\0'; i++) {
-    
-    printf("%d  ");
-  }
-  printf("\n");
   
   
 //----------------------------------------------------  
@@ -181,7 +182,7 @@ int primeFactors(int s[], int num) {
                 }
             }
 
-            /* If 'i' is Prime number and factor of num */
+            
             if(isPrime==1) {
                 
                 s[p] = i;
@@ -243,7 +244,7 @@ void codifica(unsigned long int vet[], char s[], int n1, int n2) {
     }
 }
 
-int calculaModulo( int n, int firstKey, int Y) {
+int calculaModulo( int n, int firstKey,int Y) {
   
   int num;
   
