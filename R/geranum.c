@@ -17,94 +17,100 @@ void printInt(int s[], int size); // imprime cada elemento de um vetor de 0 a si
 int escolhePubKey(int n1, int n2); //retorna 1 número, o outro será prime1*prime2
 int mdc(int a, int b); //Algoritmo de Euclides iterativo
 int mmc(int a, int b); //Algoritmo do MMC
-void codifica(unsigned long int vet[], char s[], int n1, int n2); //Converte com (s[i]^p)%div
+void codifica(int vet[], char s[], int n1, int n2); //Converte com (s[i]^p)%div
 
-int calculaModulo( int n, int firstKey,int Y); //geral o tal 77
+int calculaModulo( int n, int firstKey,int Y);
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 //§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
 int main(void) {
-  
-  int privKey;
-  int n = 0; 
-  int Y = 192;
-  
-  ///////////////////////////////////////////////////////
-  //A chave de decodificação cujo produto pelo primeiro número publicado
-  // while (n != 1){
-  
-  //   privKey++;
-  //   n = calculaModulo( privKey, 5, Y);  
-  // }
-    
-  // printf("\n%d\n", privKey);
-  ///////////////////////////////////////////////////////
-  
-  FILE *fp;
-  char str[MAX];
-  char* filename = "./numcripto.txt";
-  int j = 0;
-  
-  fp = fopen(filename, "r");
-  
-  if (fp == NULL){
-      printf("Could not open file %s",filename);
-      return 1;
-    }
-  
-  char * num;
-  int numbers[MAX];
-    while ( (num = fgets(fp)) != EOF ) {
-      
-      str[j] = num;
-      j++;
-    // numbers[j] = num;
-    // j++;
-  }
-    
-  printf("\n%d", numbers[0]);
-  
-  // while (fgets(str, MAX, fp) != NULL){
-    
-  //   for(j = 0; str[j]; j++) {
-      
-  //     fputc(str[j], fp);
-  //   }
-  // }
 
+  
+  
+  int prime1, prime2;
+  
+  printf("\nAgora você precisará escolher dois números primos.\n");
 
+  printf("\nEscolha o primeiro número primo: \n");
+  prime1 = recebePrimeNum();
+  printf("\nEscolha o segundo número primo: \n");
+  prime2 = recebePrimeNum();
+  
+  int prodPrime;
+  prodPrime = prime1 * prime2;
+  int Y;
+  Y = (prime1 - 1)*(prime2 - 1);
+  
+  //Essa parte é responsável por escolher as chaves públicas
+  int numPrimeFactors; //Quantos são os fatores primos
+  int fatoresPrimos[100];
+  numPrimeFactors = primeFactors(fatoresPrimos, Y);
+  int firstPubKey;
+  firstPubKey = escolhePubKey(fatoresPrimos[0], fatoresPrimos[numPrimeFactors - 1]);
+  
+  FILE* fp = fopen("numcripto.txt", "w+");
+  
+  fp = fopen("numcripto.txt", "w+");
+  fprintf(fp, "%d ", firstPubKey);
+  fprintf(fp, "%d", prodPrime);
   fclose(fp);
-    
-    
-      
-  // pubKeys[0] = fgets(pubKeys, sizeof pubKeys, "numcripto.txt");
   
-  // printf("\n\n%s", pubKeys);
+
+  // printf("\n firstPubKey é: %d", firstPubKey);
+  // printf("\nprodPrime é: %d\n", prodPrime);
   
+  //A chave de decodificação cujo produto pelo primeiro número publicado
+  int n;
+  int privKey = 0;
+  
+  while (n != 1){
+  
+    privKey++;
+    n = calculaModulo( privKey, 5, Y);  
+  }
+  
+  fp = fopen("numdescripto.txt", "w+");
+  fprintf(fp, "%d", privKey);
+  fclose(fp);
+  
+  
+  printf("\nAs chaves públicas e privadas foram geradas.\n");
 //----------------------------------------------------  
   return 0;
 }
 //§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
 
 
+//----------------------------------------------------  
 int checaPrimo(int a) {
+  
   int c;
-  int var = 1;
-  
-  for (c = 2; c <= (a -1); c+=1) {
-    
-    if (a % c == 0) {
+
+  for ( c = 2 ; c <= a - 1 ; c++ ) {
       
-      return 0;
-    }
-    
+    if ( a%c == 0 )
+    return 0;
   }
+  return 1;
+  // int c;
+  // int var = 1;
   
-  if (c == a) {
+  // for (c = 2; c <= (a -1); c+=1) {
     
-      return 1;
-    }
+  //   if (a % c == 0) {
+      
+  //     return 0;
+  //   }
+    
+  // }
+  
+  // if (c == a) {
+    
+  //     return 1;
+  //   }
 }
+//----------------------------------------------------  
+
 
 int recebePrimeNum() {
   
@@ -187,7 +193,7 @@ int primeFactors(int s[], int num) {
                 }
             }
 
-            /* If 'i' is Prime number and factor of num */
+            
             if(isPrime==1) {
                 
                 s[p] = i;
@@ -221,11 +227,13 @@ int mmc(int a, int b){
     return a * (b / mdc(a, b));
 }
 
-void codifica(unsigned long int vet[], char s[], int n1, int n2) {
+void codifica(int vet[], char s[], int n1, int n2) {
 
     int i;
     int pot, div;
-    unsigned long int temp;
+    unsigned long int resultPow;
+    int resultDiv;
+    // unsigned long int temp[MAX];
 
     if(n1 < n2) {
 
@@ -236,19 +244,13 @@ void codifica(unsigned long int vet[], char s[], int n1, int n2) {
         pot = n2;
         div = n1;
     }
+  
+  for( i = 0; s[i] != '\0'; i++) {
     
-    
-
-    for( i  = 0; s[i] != '\0'; i++){
-
-        vet[i] = s[i];
-    }
-
-    for(int j = 0; j != i; j++) {
-
-        temp = pow(vet[j], pot);
-        vet[j] = temp % n2;
-    }
+    resultPow = pow(s[i], pot);
+    resultDiv = resultPow % div;
+    vet[i] = resultDiv;
+  }
 }
 
 

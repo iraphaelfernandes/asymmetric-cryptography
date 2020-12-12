@@ -21,9 +21,6 @@ void codifica(int vet[], char s[], int n1, int n2); //Converte com (s[i]^p)%div
 
 int calculaModulo( int n, int firstKey, int Y); //uso para achar o tal 77
 
-
-void decodifica(int vetor[], int privKey, int prodPrime, char frase[]);
-
 char itoc(int a);
 void str_reverse(char str1[], int index, int size);
 void itob(int n, char s[], int b);
@@ -31,6 +28,8 @@ void itob(int n, char s[], int b);
 int decToBin(int n);
 int returnLastNum(int num);
 int eliminaLastDigt( int n);
+
+int decodifica(int numCod, int privKey, int prodPrime);
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -40,11 +39,14 @@ int main(void) {
 
   char frase[MAX];
   //int tamFrase;
-  printf("\nDigite uma fase para ser criptografada: \n");
+  printf("\nDigite o texto para ser criptografada. e pressione ctrl+d para indicar o final dela. \n");
   
   lelinha (frase, MAX);
-  printf("A frase a ser criptografada é:\n%s\n", frase);
   
+  printf("\nA frase a ser criptografada é:\n%s\n", frase);
+  
+  
+  //Recebendo os números primos
   int prime1, prime2;
   
   printf("\nAgora você precisará escolher dois números primos.\n");
@@ -66,6 +68,8 @@ int main(void) {
   int firstPubKey;
   firstPubKey = escolhePubKey(fatoresPrimos[0], fatoresPrimos[numPrimeFactors - 1]);
   
+  
+  
   printf("\nAs chaves públicas são %d e %d.\n", firstPubKey, prodPrime);
   
   int n;
@@ -81,40 +85,53 @@ int main(void) {
   
   
   //Aqui converterá a frase na mensagem transmitida
-  int vet[MAX];
+  int vetCodificado[MAX];
   
-  codifica(vet, frase, firstPubKey, prodPrime);
+  codifica(vetCodificado, frase, firstPubKey, prodPrime);
   
   
-  printf("\nA mensagem transmitida será: \n");
+  printf("\nA mensagem criptografada e transmitida será: \n");
     
   for( int i = 0; frase[i] != '\0'; i++) {
     
-    printf("%d  ", vet[i]);
+    printf("%d  ", vetCodificado[i]);
   }
   printf("\n");
   
   //Decodificação*********************************
   
-  // char strM[MAX];
-  // int p = 0;
-  // char caract;
-  // int inteiro;
+  int fraseDecod[MAX];
+  int varTemp;
+  for(int i = 0; frase[i] != '\0'; i++) {
+    
+    varTemp = decodifica(vetCodificado[i] , privKey, prodPrime);
+    fraseDecod[i] = varTemp;
+  }
   
-  // while(frase[p] != '\0') {
+  printf("\nA mensagem recuperada em código ASCII é: \n");
+    
+  for( int i = 0; frase[i] != '\0'; i++) {
+    
+    printf("%d  ", fraseDecod[i]);
+  }
+  printf("\n");
   
-  //   inteiro = vet[p];
-  //   caract = itoc(inteiro);
-  //   strM[p] = caract;
-  //   p++;
-  // }
-  // strM[p] = '\0';
-  
-  // printf("\nA frase transmitida: \n");
-  // printf("%s\n", strM);
+  char fraseRecuperada[MAX];
+  // char carac;
+  // int varCarc;
+  int p;
+  for (p = 0; frase[p] != '\0'; p++) {
   
   
+    fraseRecuperada[p] = fraseDecod[p];
+    // varCarc = fraseDecod[i];
+    // carac = itoc();
+  }
+  p++;
+  fraseRecuperada[p] = '\0';
   
+  printf("\nOu seja:");
+  printf("\n%s\n", fraseRecuperada);
   
 //----------------------------------------------------  
   return 0;
@@ -148,6 +165,24 @@ void codifica(int vet[], char s[], int n1, int n2) {
   }
 }
 
+//----------------------------------------------------  
+int decodifica(int numCod, int privKey, int prodPrime) { 
+    
+    numCod = numCod % prodPrime; 
+    int temp = 1;
+    if (numCod == 0) return 0;
+    
+    while (privKey > 0) {
+    
+        if (privKey % 2 == 1) 
+            temp = (temp*numCod) % prodPrime; 
+        privKey = privKey>>1; 
+
+        numCod = (numCod*numCod) % prodPrime;   
+    } 
+    return temp; 
+} 
+//----------------------------------------------------  
 int recebePrimeNum() {
   
   int n;
@@ -164,20 +199,37 @@ int recebePrimeNum() {
     recebePrimeNum();
   }
 }
+//----------------------------------------------------  
+int checaPrimo(int a) {
+  
+  int c;
 
-void decodifica(int vetor[], int privKey, int prodPrime, char frase[]) {
-  
-  unsigned long int resultPow;
-  int resultDiv;
-  
-  for (int i = 0; frase[i] != '\0'; i++) {
-    
-    resultPow = pow(vetor[i], privKey);
-    resultDiv = (resultPow % prodPrime);
-    vetor[i] = resultDiv;
+  for ( c = 2 ; c <= a - 1 ; c++ ) {
+      
+    if ( a%c == 0 )
+    return 0;
   }
+  return 1;
+  // int c;
+  // int var = 1;
   
+  // for (c = 2; c <= (a -1); c+=1) {
+    
+  //   if (a % c == 0) {
+      
+  //     return 0;
+  //   }
+    
+  // }
+  
+  // if (c == a) {
+    
+  //     return 1;
+  //   }
 }
+
+//----------------------------------------------------  
+
 
 
 int escolhePubKey(int n1, int n2) {
@@ -197,33 +249,7 @@ int calculaModulo( int n, int firstKey, int Y) {
   return num;  
 }
 
-int checaPrimo(int a) {
-  
-     int c;
- 
-   for ( c = 2 ; c <= a - 1 ; c++ )
-   { 
-      if ( a%c == 0 )
-     return 0;
-   }
-   return 1;
-  // int c;
-  // int var = 1;
-  
-  // for (c = 2; c <= (a -1); c+=1) {
-    
-  //   if (a % c == 0) {
-      
-  //     return 0;
-  //   }
-    
-  // }
-  
-  // if (c == a) {
-    
-  //     return 1;
-  //   }
-}
+
 
 
 int lelinha (char s[], int lim) {
@@ -231,7 +257,8 @@ int lelinha (char s[], int lim) {
   int c, i;
   
   for(i = 0; i < lim - 1 && (c = getchar()) != '\n' && c != EOF; ++i) {
-  
+    
+    
     s[i] = c;
   }
   
