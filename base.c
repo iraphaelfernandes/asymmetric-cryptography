@@ -17,9 +17,21 @@ void printInt(int s[], int size); // imprime cada elemento de um vetor de 0 a si
 int escolhePubKey(int n1, int n2); //retorna 1 número, o outro será prime1*prime2
 int mdc(int a, int b); //Algoritmo de Euclides iterativo
 int mmc(int a, int b); //Algoritmo do MMC
-void codifica(unsigned long int vet[], char s[], int n1, int n2); //Converte com (s[i]^p)%div
+void codifica(int vet[], char s[], int n1, int n2); //Converte com (s[i]^p)%div
 
-int calculaModulo( int n, int firstKey, int Y); //geral o tal 77
+int calculaModulo( int n, int firstKey, int Y); //uso para achar o tal 77
+
+
+void decodifica(int vetor[], int privKey, int prodPrime, char frase[]);
+
+char itoc(int a);
+void str_reverse(char str1[], int index, int size);
+void itob(int n, char s[], int b);
+
+int decToBin(int n);
+int returnLastNum(int num);
+int eliminaLastDigt( int n);
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 //§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
@@ -27,7 +39,9 @@ int main(void) {
   
 
   char frase[MAX];
+  //int tamFrase;
   printf("\nDigite uma fase para ser criptografada: \n");
+  
   lelinha (frase, MAX);
   printf("A frase a ser criptografada é:\n%s\n", frase);
   
@@ -63,16 +77,43 @@ int main(void) {
     n = calculaModulo( privKey, 5, Y);
   }
   
+  printf("\nA chave privada será: %d\n", privKey);
+  
+  
   //Aqui converterá a frase na mensagem transmitida
-  unsigned long int vet[MAX];
+  int vet[MAX];
   
   codifica(vet, frase, firstPubKey, prodPrime);
   
+  
+  printf("\nA mensagem transmitida será: \n");
+    
   for( int i = 0; frase[i] != '\0'; i++) {
     
-    printf("%d  ");
+    printf("%d  ", vet[i]);
   }
   printf("\n");
+  
+  //Decodificação*********************************
+  
+  // char strM[MAX];
+  // int p = 0;
+  // char caract;
+  // int inteiro;
+  
+  // while(frase[p] != '\0') {
+  
+  //   inteiro = vet[p];
+  //   caract = itoc(inteiro);
+  //   strM[p] = caract;
+  //   p++;
+  // }
+  // strM[p] = '\0';
+  
+  // printf("\nA frase transmitida: \n");
+  // printf("%s\n", strM);
+  
+  
   
   
 //----------------------------------------------------  
@@ -81,23 +122,30 @@ int main(void) {
 //§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
 
 
-int checaPrimo(int a) {
-  int c;
-  int var = 1;
-  
-  for (c = 2; c <= (a -1); c+=1) {
-    
-    if (a % c == 0) {
-      
-      return 0;
+void codifica(int vet[], char s[], int n1, int n2) {
+
+    int i;
+    int pot, div;
+    unsigned long int resultPow;
+    int resultDiv;
+    // unsigned long int temp[MAX];
+
+    if(n1 < n2) {
+
+        pot = n1;
+        div = n2;
+    } else {
+        
+        pot = n2;
+        div = n1;
     }
+  
+  for( i = 0; s[i] != '\0'; i++) {
     
+    resultPow = pow(s[i], pot);
+    resultDiv = resultPow % div;
+    vet[i] = resultDiv;
   }
-  
-  if (c == a) {
-    
-      return 1;
-    }
 }
 
 int recebePrimeNum() {
@@ -117,6 +165,20 @@ int recebePrimeNum() {
   }
 }
 
+void decodifica(int vetor[], int privKey, int prodPrime, char frase[]) {
+  
+  unsigned long int resultPow;
+  int resultDiv;
+  
+  for (int i = 0; frase[i] != '\0'; i++) {
+    
+    resultPow = pow(vetor[i], privKey);
+    resultDiv = (resultPow % prodPrime);
+    vetor[i] = resultDiv;
+  }
+  
+}
+
 
 int escolhePubKey(int n1, int n2) {
     
@@ -125,6 +187,44 @@ int escolhePubKey(int n1, int n2) {
     
     return (num -1);
 }
+
+int calculaModulo( int n, int firstKey, int Y) {
+  
+  int num;
+  // int prod;
+  
+  num = (n * firstKey) % Y;
+  return num;  
+}
+
+int checaPrimo(int a) {
+  
+     int c;
+ 
+   for ( c = 2 ; c <= a - 1 ; c++ )
+   { 
+      if ( a%c == 0 )
+     return 0;
+   }
+   return 1;
+  // int c;
+  // int var = 1;
+  
+  // for (c = 2; c <= (a -1); c+=1) {
+    
+  //   if (a % c == 0) {
+      
+  //     return 0;
+  //   }
+    
+  // }
+  
+  // if (c == a) {
+    
+  //     return 1;
+  //   }
+}
+
 
 int lelinha (char s[], int lim) {
   
@@ -215,38 +315,90 @@ int mmc(int a, int b){
     return a * (b / mdc(a, b));
 }
 
-void codifica(unsigned long int vet[], char s[], int n1, int n2) {
 
-    int i;
-    int pot, div;
-    unsigned long int temp;
 
-    if(n1 < n2) {
+//Função itob
 
-        pot = n1;
-        div = n2;
-    } else {
-        
-        pot = n2;
-        div = n1;
-    }
+char itoc(int a) {
+  
+  if (a <= 9)
+  {
+    return a + '0';
+  }
 
-    for( i  = 0; s[i] != '\0'; i++){
-
-        vet[i] = s[i];
-    }
-
-    for(int j = 0; j != i; j++) {
-
-        temp = pow(vet[j], pot);
-        vet[j] = temp % n2;
-    }
+  return a + 'a' - 10;
 }
 
-int calculaModulo( int n, int firstKey, int Y) {
+void itob(int n, char s[], int b) {
+  int i = 0, sign = n;
+
+  do {
+    
+    s[i++] = itoc(abs(n) % b);
+    n /= b;
+  } while (n /= b);
+
+  switch (b) {
+    
+  case 2:
+    s[i++] = 'b';
+    s[i++] = '0';
+    break;
+
+  case 16:
+    s[i++] = 'x';
+    s[i++] = '0';
+    break;
+  }
+
+  if (sign < 0)
+  {
+    s[i++] = '-';
+  }
+
+  s[i] = '\0';
+
+  int s_len = strlen(s);
+  str_reverse(s, 0, s_len - 1);
+}
+
+void str_reverse(char str1[], int index, int size) {
   
-  int num;
-  
-  num = (n * firstKey) % Y;
-  return num;  
+  char temp;
+
+  temp = str1[index];
+  str1[index] = str1[size - index];
+  str1[size - index] = temp;
+
+  if (index == size / 2) {
+    
+    return;
+  }
+
+  str_reverse(str1, index + 1, size);
+}
+
+
+int decToBin(int n) {
+    
+    long long bin = 0;
+    int rem, i = 1;
+    while (n != 0) {
+        rem = n % 2;
+        n /= 2;
+        bin += rem * i;
+        i *= 10;
+    }
+    return bin;
+}
+
+int returnLastNum(int num) {
+    
+    return num % 10;
+    
+}
+
+int eliminaLastDigt( int n) {
+    
+    return n / 10;
 }

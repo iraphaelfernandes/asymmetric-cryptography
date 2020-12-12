@@ -244,11 +244,11 @@ void codifica(unsigned long int vet[], char s[], int n1, int n2) {
         vet[i] = s[i];
     }
 
-    // for(int j = 0; j != i; j++) {
+    for(int j = 0; j != i; j++) {
 
-    //     temp = pow(vet[j], pot);
-    //     vet[j] = temp % n2;
-    // }
+        temp = pow(vet[j], pot);
+        vet[j] = temp % n2;
+    }
 }
 
 

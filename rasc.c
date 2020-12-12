@@ -1,56 +1,46 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 
-void converte(unsigned long int vet[], char s[], int n1, int n2);
-void printInt(unsigned long int s[], int size);
+#include <stdio.h>
+
+int decToBin(int n);
+
+int returnLastNum(int num);
+int eliminaLastDigt(int n);
+
+
+long int decodifica(long long x, unsigned long long y, long long p);
 
 int main() {
     
-    char s[] = "Celacanto";
-    unsigned long int vector[60];
-
-    converte(vector, s, 5, 221);
-    printInt(vector, 9);
-
+    long int n;
+    n = decodifica(216, 221, 77);
+    
+    printf("\n%ld\n", n);
+    
+    //----------------------
     return 0;
 }
 
 
-void converte(unsigned long int vet[], char s[], int n1, int n2) {
 
-    int i;
-    int pot, div;
-    unsigned long int temp;
-
-    if(n1 < n2) {
-
-        pot = n1;
-        div = n2;
-    } else {
+long int decodifica(long long x, unsigned long long y, long long p) {
+    
+    long long res = 1;
+    
+    x = x%p;
+    
+    if(x == 0) {
         
-        pot = n2;
-        div = n1;
+        return 0;
     }
-
-    for( i  = 0; s[i] != '\0'; i++){
-
-        vet[i] = s[i];
-    }
-
-    for(int j = 0; j != i; j++) {
-
-        temp = pow(vet[j], pot);
-        vet[j] = temp % n2;
-    }
-}
-
-
-void printInt(unsigned long int s[], int size) {
-  
-      for( int i = 0; i < size; i++ ) {
+    
+    while (y > 0) {
         
-        printf("%d ", s[i] ); 
+        if(y & 1)     
+            res = (res * x) % p;
+            
+        x = y >> 1;
+        x = (x*x) % p;
     }
-    printf("\n"); 
+    return res;
+    
 }

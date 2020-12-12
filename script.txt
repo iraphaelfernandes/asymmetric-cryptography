@@ -20,3 +20,9 @@ os números de descriptografia (numdescripto.txt
 
 9 - Faça um programa (cripto.c )que receba um texto ASCII de
 várias linhas e converta-o usando a criptografia descrita acima.
+
+
+__________________________________
+
+Para descriptografar:
+1 - Transformar a chave privada em binário;

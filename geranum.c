@@ -17,7 +17,7 @@ void printInt(int s[], int size); // imprime cada elemento de um vetor de 0 a si
 int escolhePubKey(int n1, int n2); //retorna 1 número, o outro será prime1*prime2
 int mdc(int a, int b); //Algoritmo de Euclides iterativo
 int mmc(int a, int b); //Algoritmo do MMC
-void codifica(unsigned long int vet[], char s[], int n1, int n2); //Converte com (s[i]^p)%div
+void codifica(int vet[], char s[], int n1, int n2); //Converte com (s[i]^p)%div
 
 int calculaModulo( int n, int firstKey,int Y);
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -84,7 +84,7 @@ int main(void) {
 
 int checaPrimo(int a) {
   int c;
-  int var = 1;
+  
   
   for (c = 2; c <= (a -1); c+=1) {
     
@@ -216,11 +216,13 @@ int mmc(int a, int b){
     return a * (b / mdc(a, b));
 }
 
-void codifica(unsigned long int vet[], char s[], int n1, int n2) {
+void codifica(int vet[], char s[], int n1, int n2) {
 
     int i;
     int pot, div;
-    unsigned long int temp;
+    unsigned long int resultPow;
+    int resultDiv;
+    // unsigned long int temp[MAX];
 
     if(n1 < n2) {
 
@@ -231,18 +233,15 @@ void codifica(unsigned long int vet[], char s[], int n1, int n2) {
         pot = n2;
         div = n1;
     }
-
-    for( i  = 0; s[i] != '\0'; i++){
-
-        vet[i] = s[i];
-    }
-
-    for(int j = 0; j != i; j++) {
-
-        temp = pow(vet[j], pot);
-        vet[j] = temp % n2;
-    }
+  
+  for( i = 0; s[i] != '\0'; i++) {
+    
+    resultPow = pow(s[i], pot);
+    resultDiv = resultPow % div;
+    vet[i] = resultDiv;
+  }
 }
+
 
 int calculaModulo( int n, int firstKey,int Y) {
   
