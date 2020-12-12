@@ -1,0 +1,12 @@
+* O arquivo base.c traz uma execução linear do código, ou seja:
+recebe a frase, recebe os números primos, gera as chaves públicas, 
+gera as chaves privadas, criptografa e descriptografa.
+Eu o criei para demonstrar a lógica geral de uma forma mais linear.
+
+
+*Infelizmente, não consegui implementar a passagem de parâmetros com argv.
+Mesmo assim, cripto.c, recebe o texto, pega as chaves públicas e privadas que foram geradas,
+coloca a mensagem recebida em um arquivo de texto e a mensagem criptografada em outro arquivo.
+Eu tentei simular o processo que aconteceria caso eu tivesse conseguido implementar  a 
+execução com os parâmetros da linha de comando.
+

@@ -1,4 +1,6 @@
-//Trabalho
+//Raphael dos Santos de Oliveira Fernandes
+
+
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -24,8 +26,6 @@ int calculaModulo( int n, int firstKey,int Y);
 
 //§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
 int main(void) {
-
-  
   
   int prime1, prime2;
   
@@ -55,9 +55,6 @@ int main(void) {
   fprintf(fp, "%d", prodPrime);
   fclose(fp);
   
-
-  // printf("\n firstPubKey é: %d", firstPubKey);
-  // printf("\nprodPrime é: %d\n", prodPrime);
   
   //A chave de decodificação cujo produto pelo primeiro número publicado
   int n;

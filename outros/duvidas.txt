@@ -1,2 +1,0 @@
-* Ler um arquivo e colocar em uma variável
-

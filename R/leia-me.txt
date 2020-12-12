@@ -1,8 +1,0 @@
-* O arquivo base.c traz uma execução linear do código, ou seja:
-recebe a frase, recebe os números primos, gera as chaves públicas, 
-gera as chaves privadas, criptografa e descriptografa.
-
-
-Uma questão importante, a função que eu criei para achar fatores primos
-
-* geranum - OKAY

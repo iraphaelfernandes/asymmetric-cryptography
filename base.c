@@ -1,4 +1,6 @@
-//Trabalho
+//Raphael dos Santos de Oliveira Fernandes
+
+
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -39,7 +41,7 @@ int main(void) {
 
   char frase[MAX];
   //int tamFrase;
-  printf("\nDigite o texto para ser criptografada. e pressione ctrl+d para indicar o final dela. \n");
+  printf("\nDigite o texto para ser criptografado. \n");
   
   lelinha (frase, MAX);
   
